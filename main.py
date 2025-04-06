@@ -8,7 +8,7 @@ import random
 
 # 3 - Cars of different colours (and speeds?) pass the screen from right to left.
 
-#TODO 4 - Collision detection for car hitting turtle. If hit, game over.
+# 4 - Collision detection for car hitting turtle. If hit, game over.
 
 #TODO 5 - Win screen for reaching the other side of the road
 
@@ -20,6 +20,7 @@ screen = Screen()
 screen_width = 800
 screen_height = 800
 screen.setup(width=screen_width,height=screen_height,startx=400,starty=1)
+screen.title("Frogger")
 screen.colormode(cmode=255)
 screen.tracer(0)
 screen.listen()
@@ -28,7 +29,7 @@ screen.listen()
 char=Player()
 
 #Game Parameters
-car_amount = 17
+car_amount = 18
 space_between_cars = 40
 
 #Cars
@@ -58,7 +59,7 @@ dash.pen(pencolor="black",fillcolor="black",pensize=1)
 dash.penup()
 dash.goto(dash_start)
 dash.pendown()
-for i in range (0,car_amount):
+for i in range (0,car_amount+1):
     while dash.xcor() < 800:
         dash.goto(dash.xcor()+20,dash.ycor())
         dash.pendown()
@@ -100,10 +101,6 @@ def car_move():
     for i in car_class_list:
         i.car_left()
 
-def clear_car():
-    car_class_list[4].hideturtle()
-    del car_class_list[4]
-
 def add_car_to_lane(turtle_object):
     new_car = Car()
     y = turtle_object.ycor()
@@ -112,9 +109,14 @@ def add_car_to_lane(turtle_object):
     new_car.goto(offset_x,y)
     back_car.append(new_car)
 
+def game_over():
+    draw = Turtle()
+    draw.pen(pensize=20)
+    screen.clear()
+    draw.write("GAME OVER",align="center",font=("Arial",20,"normal"))
+
 #Keybinds
 screen.onkeypress(fun=move_forward,key="w")
-screen.onkeypress(fun=clear_car,key="x")
 
 game_run = True
 ready = False
@@ -133,20 +135,24 @@ while game_run:
 
     #Add car to lane
     for i in back_car:
-        counter = 0
-        if i.xcor() < 0:
+
+        if i.xcor() < random.randrange(0,100):
             back_car.remove(i)
             add_car_to_lane(i)
 
+    #Check for collisions
     for i in car_class_list:
-        if i.xcor()-20 < char.xcor() < i.xcor()+20:
-            print("debug")
+        if i.xcor()-20 < char.xcor() < i.xcor()+20 and i.ycor()-10 < char.ycor() < i.ycor()+10:
+            screen.clear()
+            screen.bgcolor("red")
+            game_run = False
 
     #Delete car object when they have moved off screen
     for i in car_class_list:
-        if i .xcor() < -300:
+        if i .xcor() < -400:
             i.hideturtle()
             del i
 
+game_over()
 screen.exitonclick()
 
