@@ -1,7 +1,10 @@
 from turtle import Turtle, Screen
+
 from player import Player
 from car import Car
+from score import Score
 import random
+
 # 1 - 800x800 screen
 
 # 2 - Turtle at bottom of screen. can only move forward with a key press
@@ -25,6 +28,8 @@ screen.colormode(cmode=255)
 screen.tracer(0)
 screen.listen()
 
+scoreboard = Score()
+
 #Player Character
 char=Player()
 
@@ -33,7 +38,6 @@ car_amount = 18
 space_between_cars = 40
 
 #Cars
-
 car_list = []
 car_class_list = []
 car_starting_locations = []
@@ -46,6 +50,7 @@ road.pen(pencolor="black",fillcolor="black",pensize=2)
 road.penup()
 road.goto(starting_position)
 road.pendown()
+
 for i in range (0,car_amount):
     road.goto(x=800,y=road.ycor())
     road.goto(x=800,y=road.ycor()+space_between_cars)
@@ -59,6 +64,7 @@ dash.pen(pencolor="black",fillcolor="black",pensize=1)
 dash.penup()
 dash.goto(dash_start)
 dash.pendown()
+
 for i in range (0,car_amount+1):
     while dash.xcor() < 800:
         dash.goto(dash.xcor()+20,dash.ycor())
@@ -109,6 +115,12 @@ def add_car_to_lane(turtle_object):
     new_car.goto(offset_x,y)
     back_car.append(new_car)
 
+def increase_score():
+    scoreboard.add_score()
+    char.goto(x=0,y=-370)
+    for i in car_class_list:
+        i.increase_speed()
+
 def game_over():
     draw = Turtle()
     draw.pen(pensize=20)
@@ -146,6 +158,10 @@ while game_run:
             screen.clear()
             screen.bgcolor("red")
             game_run = False
+
+    #Check for increasing score and reset player position
+    if char.ycor() >= 360:
+        increase_score()
 
     #Delete car object when they have moved off screen
     for i in car_class_list:

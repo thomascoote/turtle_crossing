@@ -5,6 +5,7 @@ import random
 class Car(Turtle):
     def __init__(self):
         super().__init__()
+        self.current_speed = 0
         self.speed = random.randrange(1,3)
         self.start = random.randrange(350,800)
         self.penup()
@@ -26,3 +27,7 @@ class Car(Turtle):
         x_pos = self.xcor()
         y_pos = self.ycor()
         self.goto(x_pos-self.speed,y_pos)
+
+    def increase_speed(self):
+        self.current_speed += 1
+        self.speed = random.randrange(1+self.current_speed, 3+self.current_speed)
