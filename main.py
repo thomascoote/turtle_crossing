@@ -13,9 +13,9 @@ import random
 
 # 4 - Collision detection for car hitting turtle. If hit, game over.
 
-#TODO 5 - Win screen for reaching the other side of the road
+# 5 - Win screen for reaching the other side of the road
 
-#TODO 6 - Scoreboard, and increase speed of cars with each successful game.
+# 6 - Scoreboard, and increase speed of cars with each successful game.
 
 
 #Screen setup
